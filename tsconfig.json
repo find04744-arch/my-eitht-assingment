@@ -32,6 +32,6 @@
     "components/Navbar.jsx",
     "app/layout.jsx",
     "app/page.jsx"
-, "tailwind.config.js"  ],
+, "tailwind.config.js", "next.config.mjs"  ],
   "exclude": ["node_modules"]
 }
