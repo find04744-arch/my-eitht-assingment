@@ -8,7 +8,7 @@ export default function Home() {
 
   useEffect(() => {
     // API থেকে প্রথম ৪টি টাইলস ফেচ করা
-    fetch("/api/tiles")
+    fetch("/tiles.json")
       .then((res) => res.json())
       .then((data) => setTiles(data.slice(0, 4)))
       .catch((err) => console.log("Error fetching tiles:", err));
