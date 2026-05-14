@@ -3,7 +3,7 @@ import { authClient } from "../lib/auth-client"; // আপনার ফোল্
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FaUserEdit, FaUserCircle, FaEnvelope } from "react-icons/fa";
-import PrivateRoute from "../components/PrivateRoute"; // প্রাইভেট রাউট প্রোটেকশন
+import PrivateRoute from "../../components/PrivateRoute"; // প্রাইভেট রাউট প্রোটেকশন
 
 export default function MyProfile() {
   const { data: session, isPending } = authClient.useSession();
