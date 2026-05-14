@@ -1,14 +1,19 @@
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer"; // Import korun
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
+import Navbar from "../components/Navbar"; 
+import Footer from "../components/Footer"; 
+import 'animate.css'; 
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="light">
-      <body>
+      <body className="antialiased">
         <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer /> {/* Footer add korun */}
+        <Toaster position="top-center" />
+        <main className="min-h-screen">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );
