@@ -19,8 +19,8 @@ export default function UpdateProfile() {
     const image = e.target.image.value;
 
     try {
-      // BetterAuth Documentation অনুযায়ী ইউজার আপডেট লজিক
-      const { data, error } = await authClient.updateUser({
+      // BetterAuth-এর লেটেস্ট ভার্সনে আপডেট করার সঠিক নিয়ম:
+      const { data, error } = await authClient.user.update({
         name: name,
         image: image,
       });
@@ -29,8 +29,9 @@ export default function UpdateProfile() {
         toast.error(error.message || "Update failed!");
       } else {
         toast.success("Profile updated successfully!");
+        // ইউজারকে প্রোফাইল পেজে ফেরত পাঠানো
         router.push("/my-profile");
-        router.refresh();
+        router.refresh(); 
       }
     } catch (err) {
       toast.error("Something went wrong!");
