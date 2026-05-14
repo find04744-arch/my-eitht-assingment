@@ -1,73 +1,49 @@
 "use client";
-import Link from "next/link";
-import { FaGoogle, FaEnvelope, FaLock } from "react-icons/fa";
+import { useState } from "react";
+import { authClient } from "@/lib/auth-client"; // BetterAuth client
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
-  const handleLogin = (e) => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // এখানে আপনার লগইন লজিক বা BetterAuth কল হবে
-    console.log("Logging in...");
+    setLoading(true); // Proxy/Loader Start
+
+    const { email, password } = e.target.elements;
+
+    try {
+      const { data, error } = await authClient.signIn.email({
+        email: email.value,
+        password: password.value,
+      });
+
+      if (error) {
+        toast.error(error.message);
+      } else {
+        toast.success("Login Successful!");
+        router.push("/"); // Navigate to Home
+      }
+    } catch (err) {
+      toast.error("Something went wrong!");
+    } finally {
+      setLoading(false); // Proxy/Loader Stop
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-base-200 px-4 py-12">
-      <div className="card w-full max-w-md bg-base-100 shadow-2xl rounded-[2rem] overflow-hidden border border-white/20">
-        <div className="card-body p-8 md:p-12">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-neutral">Welcome Back</h2>
-            <p className="text-gray-500 mt-2">Login to your account to continue</p>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-4">
-            {/* Email Field */}
-            <div className="form-control">
-              <label className="label font-bold text-xs uppercase tracking-widest text-gray-400">Email Address</label>
-              <div className="relative">
-                <FaEnvelope className="absolute left-4 top-4 text-gray-400" />
-                <input 
-                  type="email" 
-                  placeholder="name@example.com" 
-                  className="input input-bordered w-full pl-12 rounded-xl bg-base-200 border-none focus:ring-2 focus:ring-primary transition-all" 
-                  required 
-                />
-              </div>
-            </div>
-
-            {/* Password Field */}
-            <div className="form-control">
-              <label className="label font-bold text-xs uppercase tracking-widest text-gray-400">Password</label>
-              <div className="relative">
-                <FaLock className="absolute left-4 top-4 text-gray-400" />
-                <input 
-                  type="password" 
-                  placeholder="••••••••" 
-                  className="input input-bordered w-full pl-12 rounded-xl bg-base-200 border-none focus:ring-2 focus:ring-primary transition-all" 
-                  required 
-                />
-              </div>
-            </div>
-
-            {/* Login Button */}
-            <button type="submit" className="btn btn-primary w-full rounded-xl text-white font-bold shadow-lg shadow-primary/30 mt-4">
-              Login
-            </button>
-          </form>
-
-          <div className="divider text-xs text-gray-400 uppercase tracking-widest my-8">Or continue with</div>
-
-          {/* Social Login */}
-          <button className="btn btn-outline w-full rounded-xl gap-3 border-gray-200 hover:bg-base-200 hover:text-neutral">
-            <FaGoogle className="text-red-500" /> Login with Google
-          </button>
-
-          <p className="text-center mt-8 text-sm text-gray-600">
-            Don't have an account?{" "}
-            <Link href="/register" className="text-primary font-bold hover:underline">
-              Register Now
-            </Link>
-          </p>
-        </div>
-      </div>
+    <div className="max-w-md mx-auto mt-20 p-8 bg-white rounded-3xl shadow-2xl">
+      <h2 className="text-3xl font-bold mb-6">Login</h2>
+      <form onSubmit={handleLogin} className="space-y-4">
+        <input name="email" type="email" placeholder="Email" className="input input-bordered w-full rounded-xl" required />
+        <input name="password" type="password" placeholder="Password" className="input input-bordered w-full rounded-xl" required />
+        
+        <button disabled={loading} className="btn btn-primary w-full rounded-xl text-white">
+          {loading ? <span className="loading loading-spinner"></span> : "Login"}
+        </button>
+      </form>
     </div>
   );
 }
